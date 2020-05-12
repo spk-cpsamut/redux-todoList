@@ -1,26 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import "antd/dist/antd.css";
 
-function App() {
+import Role from "./config/Role";
+
+function App(props) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Switch>
+        {Role[props.statusUser].havePaths.map((row) => {
+          return <Route exact path={row.path} component={row.component} />;
+        })}
+
+        <Redirect to={Role[props.statusUser].redirect} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    statusUser: state.statusUser,
+  };
+};
+
+export default connect(mapStateToProps)(App);
