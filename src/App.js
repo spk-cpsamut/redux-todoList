@@ -23,7 +23,7 @@ function App(props) {
 
 const mapStateToProps = (state) => {
   return {
-    statusUser: state.statusUser,
+    statusUser: state.user.statusUser,
   };
 };
 

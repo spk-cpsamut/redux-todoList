@@ -1,14 +1,21 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import "./css/todo.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, combineReducers } from "redux";
 
-import reducer from "./store/reducer";
+import userReducer from "./store/reducer/user";
+import todoListReducer from "./store/reducer/todoList";
 
-const store = createStore(reducer);
+const rootReducer = combineReducers({
+  user: userReducer,
+  todo: todoListReducer,
+});
+
+const store = createStore(rootReducer);
 
 ReactDOM.render(
   <Provider store={store}>
