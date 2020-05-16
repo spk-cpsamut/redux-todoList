@@ -6,7 +6,7 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
-
+import { loadState, saveState } from "./store/storeService";
 import userReducer from "./store/reducer/user";
 import todoListReducer from "./store/reducer/todoList";
 
@@ -37,12 +37,19 @@ const logger2 = (store) => {
   };
 };
 
+const persisState = loadState();
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
   rootReducer,
+  persisState,
   composeEnhancers(applyMiddleware(logger1, thunk))
 );
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 ReactDOM.render(
   <Provider store={store}>

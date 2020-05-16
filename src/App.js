@@ -1,13 +1,26 @@
-import React from "react";
-import logo from "./logo.svg";
+import React, { useEffect } from "react";
+
 import "./App.css";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import "antd/dist/antd.css";
 
+import axios from "./config/axios";
+
 import Role from "./config/Role";
+import { actionCreators } from "./store/action/actionCreators";
 
 function App(props) {
+  useEffect(() => {
+    if (localStorage.getItem("ACCESS_TOKEN")) {
+      const checkToken = async () => {
+        await axios.get("/todo/check-token");
+      };
+
+      checkToken();
+    }
+  }, []);
+
   return (
     <BrowserRouter>
       <Switch>
@@ -27,4 +40,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    stayMember: () => dispatch(actionCreators.stayMember()),
+    getTodoList: () => dispatch(actionCreators.getTodoList()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
